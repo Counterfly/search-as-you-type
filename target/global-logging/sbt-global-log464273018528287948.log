@@ -1,0 +1,5 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtStashOnFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, shutdown, [true,null])[0m
+[0m[[0m[0minfo[0m] [0m[0mshutting down sbt server[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, shutdown, [false,null])[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtMapExec f911e6f0-2ea8-45b7-8d61-a8734ac524f0 __0a2f0a6b-6fa1-4032-af21-5b74d916f584, None, None)[0m
