@@ -1,8 +1,0 @@
-[debug] > Exec(__stopWatch network-15, None, None)
-[warn] build source files have changed
-[warn] modified files: 
-[warn]   /Users/mloyzer/workspace/personal/search-as-you-type/build.sbt
-[warn] Apply these changes by running `reload`.
-[warn] Automatically reload the build when source changes are detected by setting `Global / onChangedBuildSource := ReloadOnSourceChanges`.
-[warn] Disable this warning by setting `Global / onChangedBuildSource := IgnoreSourceChanges`.
-[debug] > Exec(shell, None, None)

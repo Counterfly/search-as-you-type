@@ -40,18 +40,24 @@ search-as-you-type
 3. **Run the service:**
    You can start the Finagle HTTP server by running:
    ```
-   sbt run
+   sbt "server/run -config base"
    ```
 
 4. **Access the log endpoint:**
    Once the server is running, you can send log messages to the endpoint:
    ```
    POST http://localhost:8080/log
-   Content-Type: application/json
+   Content-Type: test/plain
+   Hello, World
+   ```
+   e.g. using `curl`:
+   ```bash
+   curl -X POST -H "Content-Type: text/plain" http://localhost:8080/log -d "Hello, World"
+   ```
 
-   {
-       "message": "Your log message here"
-   }
+   e.g. using `just`:
+   ```bash
+   just log "Hello, World"
    ```
 
 ## Usage Examples

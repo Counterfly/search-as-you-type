@@ -3,3 +3,6 @@
 .metals/
 .vscode/
 
+project/target/*
+target
+target/*
