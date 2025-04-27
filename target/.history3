@@ -59,3 +59,6 @@
 1745464631019:server/run -config base
 1745465795787:compile
 1745466146557:server/run -config base
+1745775779299:compile
+1745775845518:clean
+1745775846206:compile
