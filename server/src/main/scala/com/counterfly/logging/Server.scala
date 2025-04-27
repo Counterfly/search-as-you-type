@@ -28,8 +28,7 @@ object Server extends MyServer with FlagConfig {
   // Override this by specifing `-http.port=1234` in the command line
   // override def defaultHttpPort: String = ":7000"
 
-  private[this] lazy val serverConfig: ServerConfig =
-    ServerConfig.parseConfig(config.getConfig(name))
+  private[this] lazy val serverConfig: ServerConfig = ServerConfig(name)
 
   // todo: Create IngestService as a singleton to manage its lifecycle
   private[this] lazy val logController = new IngestController(new IngestService(
