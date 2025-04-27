@@ -20,6 +20,7 @@ lazy val server =
         "org.slf4j" % "slf4j-api" % "2.0.17",
         "com.twitter" %% "finatra-http-server" % "24.2.0",
         "com.typesafe" % "config" % "1.4.3",
+        "org.apache.kafka" % "kafka-clients" % "3.5.1",
       ),
     )
     .settings(

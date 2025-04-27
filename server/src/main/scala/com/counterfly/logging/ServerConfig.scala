@@ -9,20 +9,36 @@ import com.twitter.util.Managed
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 
-case class ServerConfig() {
-  def build(): ServerContext = {
-    new ServerContext()
-  }
-}
+case class ServerConfig(
+  topicLogReceived: String,
+  kafkaProducerConfig: KafkaProducerConfig,
+)
 
 object ServerConfig {
 
   def apply(configName: String = "development"): ServerConfig = {
     val config: Config = ConfigFactory.load(s"$configName.conf")
-    parseConfig(config)
-  }
 
-  def parseConfig(config: Config): ServerConfig = {
-    ServerConfig()
+    ServerConfig(
+      topicLogReceived = config.getString("topic-log-received"),
+      kafkaProducerConfig = KafkaProducerConfig(
+        config.getConfig("kafka-producer"),
+      ),
+    )
   }
+}
+
+case class KafkaProducerConfig(
+  bootstrapServers: String, // in form "host:port,host:port"
+  acks: String,
+  maxInFlightRequests: Int,
+)
+
+object KafkaProducerConfig {
+
+  def apply(config: Config) = new KafkaProducerConfig(
+    bootstrapServers = config.getString("bootstrap-servers"),
+    acks = config.getString("acks"),
+    maxInFlightRequests = config.getInt("max-in-flight-requests"),
+  )
 }

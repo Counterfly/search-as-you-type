@@ -18,4 +18,4 @@ GREEN := '\033[0;32m'
 URL := "http://localhost:8888/v1"
 
 log message:
-  curl -X POST -H "Content-Type: text/plain" {{ URL }}/log -d {{ message }} 
+  curl -X POST -H "Content-Type: text/plain" {{ URL }}/log -d "{{ message }}"

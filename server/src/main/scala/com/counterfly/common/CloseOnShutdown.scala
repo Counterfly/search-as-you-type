@@ -12,17 +12,12 @@ trait CloseOnShutdown { self: App =>
   val shutdownSleepDuration = 2.seconds
   @volatile private[this] var closedCalled = false
   runOnExit(() => {
-    println(s"running runOnExit -----")
     closedCalled = true
   })
 
-  println(s"IN CloseOnShutdown ---- ")
-
   {
-    println(s"IN CloseOnShutdown  2 ---- ")
     val closable = Closable.make { t =>
       // If close has already been called, do nothing, otherwise sleep requested amount of time before actually closing
-      println(s"IN CLOSE ---- ")
       val sleep =
         if (closedCalled) Future.Done
         else Future.sleep(shutdownSleepDuration)(self.shutdownTimer)
@@ -31,7 +26,6 @@ trait CloseOnShutdown { self: App =>
 
     // Shutdown
     sys.addShutdownHook {
-      println(s"IN shutdown hook ---- ")
       val closeGracePeriod = defaultCloseGracePeriod
 
       // TODO: convert to logger
