@@ -18,6 +18,7 @@ search-as-you-type
 │       └── resources
 │           └── logback.xml
 ├── build.sbt
+├── docker-compose.yml
 ├── project
 │   └── build.properties
 └── README.md
@@ -47,7 +48,7 @@ search-as-you-type
    Once the server is running, you can send log messages to the endpoint:
    ```
    POST http://localhost:8080/log
-   Content-Type: test/plain
+   Content-Type: text/plain
    Hello, World
    ```
    e.g. using `curl`:
@@ -60,6 +61,39 @@ search-as-you-type
    just log "Hello, World"
    ```
 
+## Kafka Setup
+
+The service is configured to send log messages to a Kafka topic.
+You can use the included Docker Compose file to set up Kafka and monitor the messages:
+
+1. **Start Kafka and related services:**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. 2. **Monitor log messages:**
+   The docker-compose file includes a consumer that automatically prints messages from the `log_received` topic to stdout.
+   You can view these logs with:
+   ```bash
+   python ./scripts/consumer.py log_received
+   ```
+<!--
+2. **Monitor log messages:**
+   The docker-compose file includes a consumer that automatically prints messages from the `log_received` topic to stdout.
+   You can view these logs with:
+   ```bash
+   docker logs -f log-consumer
+   ```
+-->
+
+3. **Access Kafka UI:**
+   A Kafka UI is available at http://localhost:8081 for monitoring topics, messages, and consumer groups.
+
+4. **Stop all services:**
+   ```bash
+   docker-compose down
+   ```
+
 ## Usage Examples
 
 - To log a message, send a POST request to the `/log` endpoint with a JSON body containing the log message.
@@ -69,4 +103,7 @@ search-as-you-type
 This project uses the following dependencies:
 - Finagle HTTP for building the service.
 - Logback for logging configuration.
-- TODO: kafka to produce logs to Kafka.
+- Kafka to produce logs to Kafka
+  - first the log is sent to a Kafka topic, log_received
+  - TODO: then a consumer reads the log from the topic and applies a filterring logic determine searches
+  
