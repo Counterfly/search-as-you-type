@@ -17,7 +17,6 @@ class IngestController(
   private val PathPrefix = "v1"
   def path(path: String): String = s"/$PathPrefix/$path"
 
-  // prefix("v1"){}
   post(path("log")) { request: Request =>
     // Log the message
     val logMessage = request.contentString
