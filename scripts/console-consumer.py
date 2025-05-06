@@ -10,7 +10,7 @@ import sys
 # python3 -m venv /pyenv
 # source /pyenv/bin/activate
 # python3 -m pip install --upgrade pip
-# python3 -m pip install kafka-python@2.1.5
+# python3 -m pip install kafka-python==2.2.4
 ###
 
 # Check if a topic is provided as a command-line argument

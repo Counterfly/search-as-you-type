@@ -58,20 +58,20 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
-  log-consumer:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: log-consumer
-    depends_on:
-      kafka:
-        condition: service_healthy
-    entrypoint: |
-      bash -c '
-        echo "Waiting for Kafka to be ready..."
-        sleep 10
+  # log-consumer:
+  #   image: confluentinc/cp-kafka:7.5.0
+  #   container_name: log-consumer
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #   entrypoint: |
+  #     bash -c '
+  #       echo "Waiting for Kafka to be ready..."
+  #       sleep 10
 
-        echo "Creating log_received topic if it doesn't exist..."
-        # kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic log_received --partitions 1 --replication-factor 1
+  #       echo "Creating log_received topic if it doesn't exist..."
+  #       # kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic log_received --partitions 1 --replication-factor 1
 
-        echo "Starting consumer on log_received topic..."
-        kafka-console-consumer --bootstrap-server kafka:29092 --topic log_received --from-beginning
-      '
+  #       echo "Starting consumer on log_received topic..."
+  #       kafka-console-consumer --bootstrap-server kafka:29092 --topic log_received --from-beginning
+  #    '

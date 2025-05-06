@@ -1,3 +1,4 @@
+import sbt.Opts.resolver
 name := "search-as-you-type"
 version := "0.1.0"
 scalaVersion := "2.13.8"
@@ -17,10 +18,10 @@ lazy val server =
       libraryDependencies ++= Seq(
         "com.twitter" %% "finagle-http" % "24.2.0",
         "ch.qos.logback" % "logback-classic" % "1.5.17",
+        "org.apache.kafka" % "kafka-clients" % "3.5.1",
         "org.slf4j" % "slf4j-api" % "2.0.17",
         "com.twitter" %% "finatra-http-server" % "24.2.0",
         "com.typesafe" % "config" % "1.4.3",
-        "org.apache.kafka" % "kafka-clients" % "3.5.1",
       ),
     )
     .settings(
@@ -33,5 +34,34 @@ lazy val server =
     .settings(
       (Compile / mainClass) := Some(
         "com.counterfly.logging.Server",
+      ),
+    )
+
+lazy val logFilter =
+  Project(
+    id = "log-filter",
+    base = file("log-filter"),
+  )
+    .settings(
+      resolvers += Resolver.DefaultMavenRepository,
+    )
+    .settings(
+      libraryDependencies ++= Seq(
+        "org.apache.kafka" % "kafka-clients" % "3.5.1",
+        "ch.qos.logback" % "logback-classic" % "1.5.17",
+        "org.slf4j" % "slf4j-api" % "2.0.17",
+        "com.typesafe" % "config" % "1.4.3",
+        "org.json4s" %% "json4s-native" % "4.0.6",
+        "org.json4s" %% "json4s-jackson" % "4.0.6",
+        "org.specs2" %% "specs2-core" % "4.21.0" % Test,
+      ),
+    )
+    .settings(
+      run / fork := true,
+      Test / fork := true,
+    )
+    .settings(
+      (Compile / mainClass) := Some(
+        "com.counterfly.logging.filter.LogFilter",
       ),
     )

@@ -16,13 +16,13 @@ case class ServerConfig(
 
 object ServerConfig {
 
-  def apply(configName: String = "development"): ServerConfig = {
-    val config: Config = ConfigFactory.load(s"$configName.conf")
+  def apply(config: Config, path: String): ServerConfig = {
+    val serverConfig: Config = config.getConfig(path)
 
     ServerConfig(
-      topicLogReceived = config.getString("topic-log-received"),
+      topicLogReceived = serverConfig.getString("topic-log-received"),
       kafkaProducerConfig = KafkaProducerConfig(
-        config.getConfig("kafka-producer"),
+        serverConfig.getConfig("kafka-producer"),
       ),
     )
   }
@@ -37,8 +37,8 @@ case class KafkaProducerConfig(
 object KafkaProducerConfig {
 
   def apply(config: Config) = new KafkaProducerConfig(
-    bootstrapServers = config.getString("bootstrap-servers"),
-    acks = config.getString("acks"),
-    maxInFlightRequests = config.getInt("max-in-flight-requests"),
+    bootstrapServers = config.getString("kafka.bootstrap-servers"),
+    acks = config.getString("kafka.acks"),
+    maxInFlightRequests = config.getInt("kafka.max-in-flight-requests"),
   )
 }

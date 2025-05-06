@@ -104,6 +104,11 @@ This project uses the following dependencies:
 - Finagle HTTP for building the service.
 - Logback for logging configuration.
 - Kafka to produce logs to Kafka
+
+
+## Flow Diagram
+
+![Log Processing Flow](./docs/architecture.draw.io.svg)
   - first the log is sent to a Kafka topic, log_received
-  - TODO: then a consumer reads the log from the topic and applies a filterring logic determine searches
+  - TODO: then a consumer reads the log from the topic and applies a filtering logic to determine searches
   

@@ -7,7 +7,6 @@ import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigParseOptions
 import com.typesafe.config.ConfigResolveOptions
 import java.nio.file.Paths
-// import com.twitter.server.TwitterServer
 
 trait Configurable {
   def config: Config
