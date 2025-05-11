@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
 import json
+import os
 import sys
 
 ###
@@ -22,13 +23,16 @@ if len(sys.argv) < 2:
 topic_name = sys.argv[1]
 print(f"Starting consumer for topic: {topic_name}")
 
+user = os.getlogin()
+print(f"User logged in: {user}")
+
 # Define consumer configuration
 consumer = KafkaConsumer(
     topic_name,
     bootstrap_servers=['localhost:9092'],
     auto_offset_reset='earliest',  # Start consuming from the beginning of the topic if no offset is stored
     enable_auto_commit=True,  # Automatically commit offsets
-    group_id='my-group', # consumer group name
+    group_id=f"python-script-console-consumer-{user}", # consumer group name
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))  # Deserialize JSON messages
 )
 
