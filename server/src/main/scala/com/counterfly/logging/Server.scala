@@ -2,23 +2,9 @@ package com.counterfly.logging
 
 import com.counterfly.common.FlagConfig
 import com.counterfly.common.MyServer
-import com.twitter.conversions.DurationOps._
-import com.twitter.finagle.Http
-import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.util.Await
-import com.twitter.util.Closable
-import com.twitter.util.Future
-import com.twitter.util.Managed
-import com.twitter.util.Time
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import ingest.IngestController
 import ingest.IngestService
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import org.apache.kafka.clients.producer.KafkaProducer
 
 object Server extends MyServer with FlagConfig {
   override val name = "search-as-you-type"
@@ -41,5 +27,7 @@ object Server extends MyServer with FlagConfig {
   override def configureHttp(router: HttpRouter): Unit = {
     router
       .add(logController)
+
+    ()
   }
 }

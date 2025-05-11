@@ -1,10 +1,6 @@
 package com.counterfly.logging
 package ingest
 
-import com.twitter.finagle.Http
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Response
 import com.twitter.logging.Logger
 import com.twitter.util.Future
 import com.twitter.util.Promise

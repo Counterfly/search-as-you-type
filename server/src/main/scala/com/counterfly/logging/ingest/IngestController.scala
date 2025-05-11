@@ -1,14 +1,7 @@
 package com.counterfly.logging.ingest
 
-import com.twitter.finagle.Http
 import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.Controller
-import com.twitter.util.Future
-import scala.util.Failure
-import scala.util.Success
-import scala.util.Try
 
 class IngestController(
   ingestService: IngestService,
