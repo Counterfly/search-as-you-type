@@ -81,8 +81,6 @@ case class KafkaStreamConfig(
     // The name must be unique in the Kafka cluster against which the application is run.
     props.put(StreamsConfig.APPLICATION_ID_CONFIG, "log-filter-docker");
     props.put(StreamsConfig.CLIENT_ID_CONFIG, "client-id-1");
-    // Where to find the Confluent schema registry instance(s)
-    // props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
 
     // Records should be flushed every 10 seconds. This is less than the default
     // in order to keep this example interactive.
