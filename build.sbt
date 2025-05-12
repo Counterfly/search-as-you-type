@@ -9,6 +9,16 @@ scalaVersion := "2.13.8"
 Global / cancelable := true
 // Run everything in a fresh JVM, so we don't conflict with SBT / future jobs
 
+// Versions
+val FinagleVersion = "24.2.0"
+val KafkaClientVersion = "3.5.1"
+val TypesafeConfigVersion = "1.4.3"
+val LogbackVersion = "1.5.17"
+val Slf4jVersion = "2.0.17"
+val KafkaStreamsScalaVersion = "3.9.0"
+val Json4sVersion = "4.0.6"
+val Specs2Version = "4.21.0"
+
 /* START EXTRA WARNINGS */
 val baseOptions: List[String] = List(
   "-Xfatal-warnings",
@@ -75,6 +85,20 @@ val extraWarnings: List[String] = (
 ).distinct
 /* DONE EXTRA WARNINGS */
 
+lazy val all = Project(
+  id = "search-as-you-type",
+  base = file("."),
+)
+  .settings(
+    Seq(
+      scalacOptions ++= extraWarnings,
+    ),
+  )
+  .aggregate(
+    server,
+    logFilter,
+  )
+
 lazy val server =
   Project(
     id = "server",
@@ -87,12 +111,12 @@ lazy val server =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "com.twitter" %% "finagle-http" % "24.2.0",
-        "ch.qos.logback" % "logback-classic" % "1.5.17",
-        "org.apache.kafka" % "kafka-clients" % "3.5.1",
-        "org.slf4j" % "slf4j-api" % "2.0.17",
-        "com.twitter" %% "finatra-http-server" % "24.2.0",
-        "com.typesafe" % "config" % "1.4.3",
+        "ch.qos.logback" % "logback-classic" % LogbackVersion,
+        "com.twitter" %% "finagle-http" % FinagleVersion,
+        "com.twitter" %% "finatra-http-server" % FinagleVersion,
+        "com.typesafe" % "config" % TypesafeConfigVersion,
+        "org.apache.kafka" % "kafka-clients" % KafkaClientVersion,
+        "org.slf4j" % "slf4j-api" % Slf4jVersion,
       ),
     )
     .settings(
@@ -123,13 +147,13 @@ lazy val logFilter =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "org.apache.kafka" %% "kafka-streams-scala" % "3.9.0",
-        "ch.qos.logback" % "logback-classic" % "1.5.17",
-        "org.slf4j" % "slf4j-api" % "2.0.17",
-        "com.typesafe" % "config" % "1.4.3",
-        "org.json4s" %% "json4s-native" % "4.0.6",
-        "org.json4s" %% "json4s-jackson" % "4.0.6",
-        "org.specs2" %% "specs2-core" % "4.21.0" % Test,
+        "ch.qos.logback" % "logback-classic" % LogbackVersion,
+        "com.typesafe" % "config" % TypesafeConfigVersion,
+        "org.apache.kafka" %% "kafka-streams-scala" % KafkaStreamsScalaVersion,
+        "org.json4s" %% "json4s-jackson" % Json4sVersion,
+        "org.json4s" %% "json4s-native" % Json4sVersion,
+        "org.slf4j" % "slf4j-api" % Slf4jVersion,
+        "org.specs2" %% "specs2-core" % Specs2Version % Test,
       ),
     )
     .settings(
