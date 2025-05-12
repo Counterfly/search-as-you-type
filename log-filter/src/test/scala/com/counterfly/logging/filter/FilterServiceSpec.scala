@@ -1,6 +1,5 @@
 package com.counterfly.logging.filter
 
-import FilterService.TerminalWord
 import java.time.Instant
 import org.specs2.mutable.Specification
 
@@ -11,7 +10,6 @@ class FilterServiceSpec extends Specification {
     "terminalWords" should {
       "identify terminal words" in {
         // Create sample log messages
-        val now = Instant.now()
         val messages = LogMessageUtils.generateLogMessages("castle") ++
           LogMessageUtils.generateLogMessages("cast") ++
           LogMessageUtils.generateLogMessages("fun with spaces") ++

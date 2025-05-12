@@ -26,14 +26,18 @@ print(f"Starting consumer for topic: {topic_name}")
 user = os.getlogin()
 print(f"User logged in: {user}")
 
+
+def deserialize_json(x):
+    return json.loads(x.decode('utf-8'))  # Deserialize JSON messages
+
 # Define consumer configuration
 consumer = KafkaConsumer(
     topic_name,
     bootstrap_servers=['localhost:9092'],
-    auto_offset_reset='earliest',  # Start consuming from the beginning of the topic if no offset is stored
+    auto_offset_reset='latest',  # Start consuming from the beginning of the topic if no offset is stored
     enable_auto_commit=True,  # Automatically commit offsets
     group_id=f"python-script-console-consumer-{user}", # consumer group name
-    value_deserializer=lambda x: json.loads(x.decode('utf-8'))  # Deserialize JSON messages
+    value_deserializer=lambda x: deserialize_json(x)
 )
 
 # Consume messages

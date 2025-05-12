@@ -17,6 +17,7 @@ import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala.kstream.KStream
 import org.apache.kafka.streams.scala.kstream.KTable
 import org.slf4j.LoggerFactory
+import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
 trait Processor {
@@ -31,6 +32,7 @@ object KafkaProcessor {
     streamProperties: StreamsConfig,
     inputTopic: String,
     outputTopic: String,
+    filterService: FilterService,
     // Window configuration
     // TODO: should be configurable
     windowSizeMs: Long = 10000, // 10 seconds window size
@@ -42,6 +44,7 @@ object KafkaProcessor {
     private val logger = LoggerFactory.getLogger(getClass)
 
     // TODO: remove implicit
+    // TODO: to optimize performance, convert these to a byte serializer
     implicit val logMessageSerde = LogMessageSerde()
     implicit val terminalWordSerde = TerminalWordSerde()
 
@@ -52,10 +55,9 @@ object KafkaProcessor {
     // TODO: better scaling with localized groupings (for e.g. by first letter of the log message)
     private val inputStream: KafkaStreams = {
       val hoppingWindow =
-        TimeWindows.ofSizeAndGrace(
-          Duration.ofMillis(10.seconds.toMillis),
-          Duration.ofMillis(9.seconds.toMillis),
-        )
+        TimeWindows
+          .ofSizeWithNoGrace(Duration.ofMillis(10.seconds.toMillis))
+          .advanceBy(Duration.ofMillis(9.seconds.toMillis))
 
       val builder = new StreamsBuilder()
       val inputStream: KStream[String, LogMessage] = builder
@@ -80,7 +82,6 @@ object KafkaProcessor {
           .aggregate(
             (new java.util.ArrayList[LogMessage]()).asInstanceOf[java.util.List[LogMessage]],
           )((_: Integer, logMessage: LogMessage, agg: java.util.List[LogMessage]) => {
-            // TODO: aggregate using Trie
             agg.add(logMessage)
             agg
           })(
@@ -104,15 +105,15 @@ object KafkaProcessor {
           logger.info(
             s"Window Closed [${windowStart} ${windowEnd}), messages: ${logMessages.size()}",
           )
-          // TODO: use Trie
           val terminalWords: java.util.List[FilterService.TerminalWord] =
-            new java.util.ArrayList[FilterService.TerminalWord]()
+            filterService.terminalWords(logMessages.asScala.toSeq).asJava
 
-          (s"global_$windowStart_$windowEnd", terminalWords)
+          (s"global_${windowStart}_${windowEnd}", terminalWords)
         }
         // output terminal words to a new topic
         .to(outputTopic)(Produced.`with`(
           Serdes.String(),
+          // serde.JsonListSerde(terminalWordSerde), // Use this for testing with python consumer
           Serdes.ListSerde(classOf[java.util.ArrayList[FilterService.TerminalWord]], terminalWordSerde),
         ))
 

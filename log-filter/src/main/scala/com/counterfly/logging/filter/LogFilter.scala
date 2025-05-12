@@ -33,6 +33,7 @@ object LogFilter {
         streamProperties = config.kafkaConsumer.build(),
         inputTopic = config.topicLogReceived,
         outputTopic = config.topicLogFiltered,
+        filterService = FilterService(),
       )
 
       // Set up shutdown hook for graceful termination

@@ -14,14 +14,12 @@ import scala.util.Success
 import scala.util.Try
 
 class TerminalWordSerializer extends Serializer[FilterService.TerminalWord] {
-  // private implicit val formats: DefaultFormats.type = DefaultFormats
-
   override def serialize(topic: String, data: TerminalWord): Array[Byte] = {
     if (data == null) return null
     Try {
       val json = s"""{
         "count":${data.count},
-        "word":${data.word}
+        "word":"${data.word}"
       }"""
       json.getBytes(StandardCharsets.UTF_8)
     } match {

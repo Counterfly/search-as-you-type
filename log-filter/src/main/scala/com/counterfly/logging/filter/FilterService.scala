@@ -2,17 +2,14 @@ package com.counterfly.logging.filter
 
 trait FilterService {
   def terminalWords(logMessages: Seq[LogMessage]): Seq[FilterService.TerminalWord]
-
-  def debug(): String
 }
 
 object FilterService {
   case class TerminalWord(word: String, count: Int)
 
   def apply() = new FilterService {
-    val trie = new MessageTrie()
-
     override def terminalWords(logMessages: Seq[LogMessage]): Seq[TerminalWord] = {
+      val trie = new MessageTrie()
 
       // Insert all log messages into the trie
       logMessages.foreach { logMessage =>
@@ -21,10 +18,6 @@ object FilterService {
 
       // Collect terminal words from the trie
       trie.collectTerminalWords()
-    }
-
-    override def debug(): String = {
-      trie.debugPrint()
     }
   }
 }
@@ -91,20 +84,20 @@ class MessageTrie {
   /**
    * Return a string representation of the trie for debugging
    */
-  def debugPrint(): String = {
-    val sb = new StringBuilder()
-    printNode(root, "", sb)
-    sb.toString
-  }
+  // def debugPrint(): String = {
+  //   val sb = new StringBuilder()
+  //   printNode(root, "", sb)
+  //   sb.toString
+  // }
 
-  private def printNode(node: TrieNode, prefix: String, sb: StringBuilder): Unit = {
-    val nodeStr = node.char.map(_.toString).getOrElse("root")
-    sb.append(s"$prefix$nodeStr (${node.count})\n")
+  // private def printNode(node: TrieNode, prefix: String, sb: StringBuilder): Unit = {
+  //   val nodeStr = node.char.map(_.toString).getOrElse("root")
+  //   sb.append(s"$prefix$nodeStr (${node.count})\n")
 
-    for ((char, child) <- node.children) {
-      printNode(child, prefix + "  ", sb)
-    }
-  }
+  //   for ((char, child) <- node.children) {
+  //     printNode(child, prefix + "  ", sb)
+  //   }
+  // }
 }
 
 object MessageTrie {
@@ -117,6 +110,7 @@ object MessageTrie {
     children: scala.collection.mutable.Map[Char, TrieNode] = scala.collection.mutable.Map.empty,
   ) {
 
+    // Helper function for local testing
     def debug: String = {
       val charStr = char.map(_.toString).getOrElse("root")
       s"TrieNode(char=$charStr, count=$count)"
