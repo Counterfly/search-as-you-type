@@ -97,6 +97,7 @@ lazy val all = Project(
   .aggregate(
     server,
     logFilter,
+    logStore,
   )
 
 lazy val server =
@@ -165,3 +166,38 @@ lazy val logFilter =
         "com.counterfly.logging.filter.LogFilter",
       ),
     )
+
+lazy val logStore =
+  Project(
+    id = "log-store",
+    base = file("log-store"),
+  )
+    .settings(
+      Seq(
+        scalacOptions ++= extraWarnings,
+      ),
+    )
+    .settings(
+      resolvers += Resolver.DefaultMavenRepository,
+    )
+    .settings(
+      libraryDependencies ++= Seq(
+        "ch.qos.logback" % "logback-classic" % LogbackVersion,
+        "com.typesafe" % "config" % TypesafeConfigVersion,
+        "org.apache.kafka" % "kafka-clients" % KafkaClientVersion,
+        "org.json4s" %% "json4s-jackson" % Json4sVersion,
+        "org.json4s" %% "json4s-native" % Json4sVersion,
+        "org.slf4j" % "slf4j-api" % Slf4jVersion,
+        "org.specs2" %% "specs2-core" % Specs2Version % Test,
+      ),
+    )
+    .settings(
+      run / fork := true,
+      Test / fork := true,
+    )
+    .settings(
+      (Compile / mainClass) := Some(
+        "com.counterfly.logging.store.LogStore",
+      ),
+    )
+    .dependsOn(logFilter)
